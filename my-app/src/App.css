@@ -1,0 +1,155 @@
+/* Modern Dashboard Theme */
+
+/* Reset & Body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fb;
+  margin: 0;
+  padding: 0;
+  color: #2d3436;
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #005bac, #00a8ff);
+  padding: 12px 25px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+nav .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+nav .logo img {
+  height: 40px;
+  border-radius: 6px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  color: #ffe66d;
+  transform: translateY(-2px);
+}
+
+/* Container */
+.container {
+  padding: 25px;
+}
+
+/* Home Section */
+.home {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.home img {
+  width: 130px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 91, 172, 0.3);
+}
+
+.home h1 {
+  font-size: 2.2rem;
+  color: #005bac;
+  margin-top: 20px;
+}
+
+.home p {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  color: #636e72;
+}
+
+/* Forms & Inputs */
+input, select, button {
+  padding: 10px 12px;
+  margin: 6px;
+  border-radius: 8px;
+  border: 1px solid #dcdde1;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: #00a8ff;
+  box-shadow: 0 0 6px rgba(0, 168, 255, 0.3);
+  outline: none;
+}
+
+button {
+  background: linear-gradient(90deg, #00a8ff, #0097e6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #0097e6, #00a8ff);
+  transform: scale(1.05);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+table, th, td {
+  border: none;
+}
+
+th, td {
+  padding: 14px 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background: #005bac;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f1f2f6;
+}
+
+tr:hover {
+  background-color: #e6f7ff;
+  transition: 0.3s ease;
+}
+
+/* Card Style (for modules) */
+.module-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 18px rgba(0, 91, 172, 0.2);
+}
