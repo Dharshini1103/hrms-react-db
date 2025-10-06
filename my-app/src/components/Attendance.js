@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const API = "http://localhost:5000"; // Backend base URL
+
 const Attendance = () => {
   const [attendance, setAttendance] = useState([]);
   const [shifts, setShifts] = useState([]);
@@ -14,7 +16,6 @@ const Attendance = () => {
   const [shiftForm, setShiftForm] = useState({ employee: "", shift: "", start: "", end: "" });
   const [leaveForm, setLeaveForm] = useState({ employee: "", from: "", to: "", reason: "", status: "Pending", attendance: "N/A" });
 
-  // Fetch data from server
   useEffect(() => {
     fetchAttendance();
     fetchShifts();
@@ -22,56 +23,55 @@ const Attendance = () => {
   }, []);
 
   const fetchAttendance = async () => {
-    const res = await axios.get("http://localhost:5000/attendance");
+    const res = await axios.get(`${API}/attendance`);
     setAttendance(res.data);
   };
 
   const fetchShifts = async () => {
-    const res = await axios.get("http://localhost:5000/shifts");
+    const res = await axios.get(`${API}/shifts`);
     setShifts(res.data);
   };
 
   const fetchLeaves = async () => {
-    const res = await axios.get("http://localhost:5000/leaves");
+    const res = await axios.get(`${API}/leaves`);
     setLeaves(res.data);
   };
 
-  // Handlers
   const handleAddAttendance = async () => {
     if (!employee || !date) return alert("Employee & Date required");
-    const res = await axios.post("http://localhost:5000/attendance", { employee, date, clockIn, clockOut });
+    const res = await axios.post(`${API}/attendance`, { employee, date, clockIn, clockOut });
     setAttendance([...attendance, res.data]);
     setEmployee(""); setDate(""); setClockIn(""); setClockOut("");
   };
 
   const handleAddShift = async () => {
     if (!shiftForm.employee || !shiftForm.shift) return alert("Employee & Shift required");
-    const res = await axios.post("http://localhost:5000/shifts", shiftForm);
+    const res = await axios.post(`${API}/shifts`, shiftForm);
     setShifts([...shifts, res.data]);
     setShiftForm({ employee: "", shift: "", start: "", end: "" });
   };
 
   const handleAddLeave = async () => {
     if (!leaveForm.employee || !leaveForm.from || !leaveForm.to) return alert("Employee, From & To required");
-    const res = await axios.post("http://localhost:5000/leaves", leaveForm);
+    const res = await axios.post(`${API}/leaves`, leaveForm);
     setLeaves([...leaves, res.data]);
     setLeaveForm({ employee: "", from: "", to: "", reason: "", status: "Pending", attendance: "N/A" });
   };
 
   const handleLeaveStatus = async (id, newStatus) => {
     const attendanceStatus = window.prompt("Mark employee as Present or Absent?", "Present") || "N/A";
-    const res = await axios.put(`http://localhost:5000/leaves/${id}`, { status: newStatus, attendance: attendanceStatus });
+    const res = await axios.put(`${API}/leaves/${id}`, { status: newStatus, attendance: attendanceStatus });
     setLeaves(leaves.map(l => l._id === id ? res.data : l));
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Attendance & Leave Management (Server-Based)</h2>
 
-      {/* Attendance Form */}
-      <div style={{ marginBottom: 20, border: "1px solid #ddd", padding: 10 }}>
+      {/* Attendance Section */}
+      <section>
         <h3>Track Clock-in/Clock-out</h3>
-        <input placeholder="Employee Name" value={employee} onChange={(e) => setEmployee(e.target.value)} />
+        <input placeholder="Employee" value={employee} onChange={(e) => setEmployee(e.target.value)} />
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         <input type="time" value={clockIn} onChange={(e) => setClockIn(e.target.value)} />
         <input type="time" value={clockOut} onChange={(e) => setClockOut(e.target.value)} />
@@ -89,13 +89,13 @@ const Attendance = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </section>
 
-      {/* Shift Management */}
-      <div style={{ marginBottom: 20, border: "1px solid #ddd", padding: 10 }}>
-        <h3>Work Shifts & Schedules</h3>
-        <input placeholder="Employee Name" value={shiftForm.employee} onChange={(e) => setShiftForm({ ...shiftForm, employee: e.target.value })} />
-        <input placeholder="Shift Name (Morning/Evening)" value={shiftForm.shift} onChange={(e) => setShiftForm({ ...shiftForm, shift: e.target.value })} />
+      {/* Shifts */}
+      <section>
+        <h3>Work Shifts</h3>
+        <input placeholder="Employee" value={shiftForm.employee} onChange={(e) => setShiftForm({ ...shiftForm, employee: e.target.value })} />
+        <input placeholder="Shift" value={shiftForm.shift} onChange={(e) => setShiftForm({ ...shiftForm, shift: e.target.value })} />
         <input type="time" value={shiftForm.start} onChange={(e) => setShiftForm({ ...shiftForm, start: e.target.value })} />
         <input type="time" value={shiftForm.end} onChange={(e) => setShiftForm({ ...shiftForm, end: e.target.value })} />
         <button onClick={handleAddShift}>Add Shift</button>
@@ -108,12 +108,12 @@ const Attendance = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </section>
 
-      {/* Leave Management */}
-      <div style={{ marginBottom: 20, border: "1px solid #ddd", padding: 10 }}>
+      {/* Leaves */}
+      <section>
         <h3>Leave Requests</h3>
-        <input placeholder="Employee Name" value={leaveForm.employee} onChange={(e) => setLeaveForm({ ...leaveForm, employee: e.target.value })} />
+        <input placeholder="Employee" value={leaveForm.employee} onChange={(e) => setLeaveForm({ ...leaveForm, employee: e.target.value })} />
         <input type="date" value={leaveForm.from} onChange={(e) => setLeaveForm({ ...leaveForm, from: e.target.value })} />
         <input type="date" value={leaveForm.to} onChange={(e) => setLeaveForm({ ...leaveForm, to: e.target.value })} />
         <input placeholder="Reason" value={leaveForm.reason} onChange={(e) => setLeaveForm({ ...leaveForm, reason: e.target.value })} />
@@ -121,9 +121,7 @@ const Attendance = () => {
 
         <table border="1" cellPadding="5" style={{ marginTop: 10 }}>
           <thead>
-            <tr>
-              <th>Employee</th><th>From</th><th>To</th><th>Reason</th><th>Status</th><th>Attendance</th><th>Actions</th>
-            </tr>
+            <tr><th>Employee</th><th>From</th><th>To</th><th>Reason</th><th>Status</th><th>Attendance</th><th>Actions</th></tr>
           </thead>
           <tbody>
             {leaves.map((l) => (
@@ -138,7 +136,7 @@ const Attendance = () => {
             ))}
           </tbody>
         </table>
-      </div>
+      </section>
     </div>
   );
 };
