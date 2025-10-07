@@ -1,20 +1,23 @@
+// ================== Import Dependencies ==================
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// ================== App Setup ==================
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: "10mb" })); // to accept large payloads
+app.use(express.json({ limit: "10mb" })); // allow large JSON payloads
 
-// ================= MongoDB Connection =================
-mongoose.connect("mongodb://127.0.0.1:27017/hrms", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("MongoDB connected"))
-.catch((err) => console.log(err));
+// ================== MongoDB Connection ==================
+mongoose
+  .connect("mongodb://127.0.0.1:27017/hrms", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(" MongoDB connection error:", err));
 
-// ================= Schemas ================== //
+// ================== Schemas ==================
 
 // Employee
 const EmployeeSchema = new mongoose.Schema({
@@ -52,7 +55,7 @@ const AttendanceSchema = new mongoose.Schema({
 });
 const Attendance = mongoose.model("Attendance", AttendanceSchema);
 
-// Shifts
+// Shift
 const ShiftSchema = new mongoose.Schema({
   employee: String,
   shift: String,
@@ -61,7 +64,7 @@ const ShiftSchema = new mongoose.Schema({
 });
 const Shift = mongoose.model("Shift", ShiftSchema);
 
-// Leaves
+// Leave
 const LeaveSchema = new mongoose.Schema({
   employee: String,
   from: String,
@@ -103,7 +106,7 @@ const TrainingSchema = new mongoose.Schema({
 });
 const Training = mongoose.model("Training", TrainingSchema);
 
-// Jobs
+// Job
 const JobSchema = new mongoose.Schema({
   title: String,
   department: String,
@@ -111,7 +114,7 @@ const JobSchema = new mongoose.Schema({
 });
 const Job = mongoose.model("Job", JobSchema);
 
-// Requests (Generic requests)
+// Request
 const RequestSchema = new mongoose.Schema({
   employee: String,
   request: String,
@@ -120,68 +123,118 @@ const RequestSchema = new mongoose.Schema({
 });
 const Request = mongoose.model("Request", RequestSchema);
 
-// ================= Routes ================== //
+// ================== Routes ==================
 
-// -------- Employees --------
+// Employees
 app.get("/employees", async (req, res) => res.json(await Employee.find()));
 app.post("/employees", async (req, res) => res.json(await Employee.create(req.body)));
-app.put("/employees/:id", async (req, res) => res.json(await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/employees/:id", async (req, res) => { await Employee.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/employees/:id", async (req, res) =>
+  res.json(await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/employees/:id", async (req, res) => {
+  await Employee.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Candidates --------
+// Candidates
 app.get("/candidates", async (req, res) => res.json(await Candidate.find()));
 app.post("/candidates", async (req, res) => res.json(await Candidate.create(req.body)));
-app.put("/candidates/:id", async (req, res) => res.json(await Candidate.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/candidates/:id", async (req, res) => { await Candidate.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/candidates/:id", async (req, res) =>
+  res.json(await Candidate.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/candidates/:id", async (req, res) => {
+  await Candidate.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Attendance --------
+// Attendance
 app.get("/attendance", async (req, res) => res.json(await Attendance.find()));
 app.post("/attendance", async (req, res) => res.json(await Attendance.create(req.body)));
-app.put("/attendance/:id", async (req, res) => res.json(await Attendance.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/attendance/:id", async (req, res) => { await Attendance.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/attendance/:id", async (req, res) =>
+  res.json(await Attendance.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/attendance/:id", async (req, res) => {
+  await Attendance.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Shifts --------
+// Shifts
 app.get("/shifts", async (req, res) => res.json(await Shift.find()));
 app.post("/shifts", async (req, res) => res.json(await Shift.create(req.body)));
-app.put("/shifts/:id", async (req, res) => res.json(await Shift.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/shifts/:id", async (req, res) => { await Shift.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/shifts/:id", async (req, res) =>
+  res.json(await Shift.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/shifts/:id", async (req, res) => {
+  await Shift.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Leaves --------
+// Leaves
 app.get("/leaves", async (req, res) => res.json(await Leave.find()));
 app.post("/leaves", async (req, res) => res.json(await Leave.create(req.body)));
-app.put("/leaves/:id", async (req, res) => res.json(await Leave.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/leaves/:id", async (req, res) => { await Leave.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/leaves/:id", async (req, res) =>
+  res.json(await Leave.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/leaves/:id", async (req, res) => {
+  await Leave.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Payroll --------
+// Payroll
 app.get("/payrolls", async (req, res) => res.json(await Payroll.find()));
 app.post("/payrolls", async (req, res) => res.json(await Payroll.create(req.body)));
-app.put("/payrolls/:id", async (req, res) => res.json(await Payroll.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/payrolls/:id", async (req, res) => { await Payroll.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/payrolls/:id", async (req, res) =>
+  res.json(await Payroll.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/payrolls/:id", async (req, res) => {
+  await Payroll.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Performance --------
+// Performance
 app.get("/performances", async (req, res) => res.json(await Performance.find()));
 app.post("/performances", async (req, res) => res.json(await Performance.create(req.body)));
-app.put("/performances/:id", async (req, res) => res.json(await Performance.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/performances/:id", async (req, res) => { await Performance.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/performances/:id", async (req, res) =>
+  res.json(await Performance.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/performances/:id", async (req, res) => {
+  await Performance.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Training --------
+// Training
 app.get("/trainings", async (req, res) => res.json(await Training.find()));
 app.post("/trainings", async (req, res) => res.json(await Training.create(req.body)));
-app.put("/trainings/:id", async (req, res) => res.json(await Training.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/trainings/:id", async (req, res) => { await Training.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/trainings/:id", async (req, res) =>
+  res.json(await Training.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/trainings/:id", async (req, res) => {
+  await Training.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Jobs --------
+// Jobs
 app.get("/jobs", async (req, res) => res.json(await Job.find()));
 app.post("/jobs", async (req, res) => res.json(await Job.create(req.body)));
-app.put("/jobs/:id", async (req, res) => res.json(await Job.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/jobs/:id", async (req, res) => { await Job.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/jobs/:id", async (req, res) =>
+  res.json(await Job.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/jobs/:id", async (req, res) => {
+  await Job.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// -------- Requests --------
+// Requests
 app.get("/requests", async (req, res) => res.json(await Request.find()));
 app.post("/requests", async (req, res) => res.json(await Request.create(req.body)));
-app.put("/requests/:id", async (req, res) => res.json(await Request.findByIdAndUpdate(req.params.id, req.body, { new: true })));
-app.delete("/requests/:id", async (req, res) => { await Request.findByIdAndDelete(req.params.id); res.json({ success: true }); });
+app.put("/requests/:id", async (req, res) =>
+  res.json(await Request.findByIdAndUpdate(req.params.id, req.body, { new: true }))
+);
+app.delete("/requests/:id", async (req, res) => {
+  await Request.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
 
-// ================= Start Server ================= //
+// ================== Start Server ==================
 const PORT = 5000;
-app.listen(PORT, () => console.log(` Server running at http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
